@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<Configuration status="WARN">
+		<Properties>
+			<Property name="log.path">${sys:log.path}</Property>
+			<Property name="log.base.name">Linker-Server</Property>
+			<Property name="name">Linker-Server</Property>
+		</Properties>
+		
+		<Appenders>
+			<Console name="console-log" target="SYSTEM_OUT">
+				<PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"/>
+			</Console>
+			
+			<RollingFile name="trace-log" 
+			    		fileName="${log.path}/${log.base.name}-trace.log"
+						filePattern="${log.path}/${log.base.name}-trace-%d{yyyy-MM-dd}.log">
+				
+				<PatternLayout>
+					<pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n</pattern>
+				</PatternLayout>
+				
+				<Policies>
+					<SizeBasedTriggeringPolicy size="10 MB" />
+				</Policies>
+				<DefaultRolloverStrategy max="2"/>
+			</RollingFile>
+			
+			<RollingFile name="error-log" 
+			    		fileName="${log.path}/${log.base.name}-error.log"
+						filePattern="${log.path}/${log.base.name}-error-%d{yyyy-MM-dd}.log">
+				
+				<PatternLayout>
+					<pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n</pattern>
+				</PatternLayout>
+				
+				<Policies>
+					<SizeBasedTriggeringPolicy size="10 MB" />
+				</Policies>
+				<DefaultRolloverStrategy max="2"/>
+			</RollingFile>
+			
+		</Appenders>
+		
+		<Loggers>
+			<Logger name="${name}" level="debug" additivity="false">
+				<appender-ref ref="trace-log" level="info"/>
+				<appender-ref ref="error-log" level="error"/>
+				<appender-ref ref="console-log" level="debug"/>
+			</Logger>
+			
+			<Root level="debug" additivity="false">
+				<AppenderRef ref="console-log" level ="debug"/>
+				<AppenderRef ref="trace-log" level ="info"/>
+				<AppenderRef ref="error-log" level ="error"/>
+			</Root>
+			
+		</Loggers>
+		
+	</Configuration>
