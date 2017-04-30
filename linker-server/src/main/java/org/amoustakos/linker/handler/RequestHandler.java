@@ -39,7 +39,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
@@ -173,9 +172,7 @@ public class RequestHandler extends GzipHandler {
 	}
 
 	private static void print(HttpServletResponse response, String message) throws IOException {
-        try (PrintWriter writer = response.getWriter()){
-            writer.write(message);
-        } catch (JSONException ignored) {}
+        response.getWriter().write(message);
 	}
 
 	
