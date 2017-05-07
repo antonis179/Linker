@@ -1,4 +1,5 @@
-package org.amoustakos.linker;/*
+package org.amoustakos.linker;
+/*
  *	Copyright (c) 2015 Antonis Moustakos
  *	
  *	Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,7 +20,6 @@ package org.amoustakos.linker;/*
  *	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *	THE SOFTWARE.
  */
-
 import org.amoustakos.linker.exceptions.ServerException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -18,13 +18,15 @@ import android.widget.Toast;
 
 import org.amoustakos.linker.R;
 import org.amoustakos.linker.io.DataManager;
+import org.amoustakos.linker.io.models.request.LinkRequest;
 import org.amoustakos.linker.ui.base.BaseActivity;
+import org.amoustakos.linker.util.RxUtil;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -35,8 +37,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @BindView(R.id.drawer_layout)   DrawerLayout mDrawer;
     @BindView(R.id.fab)             FloatingActionButton fab;
     @BindView(R.id.toolbar)         Toolbar mToolbar;
-
-    CompositeSubscription mSubscriptions;
 
     private boolean doubleBackToExitPressedOnce = false;
 
@@ -59,6 +59,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         navigationView.setNavigationItemSelectedListener(this);
 
         fab.setOnClickListener(v -> {
+                    test();
                     Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }
@@ -66,8 +67,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         if (savedInstanceState == null) {
             onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_dashboard));
-            mSubscriptions = new CompositeSubscription();
-
             //TESTING
 //            requestAllPermissions();
 //            registerLocationRetriever();
@@ -78,9 +77,29 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mSubscriptions != null)
-            mSubscriptions.clear();
     }
+
+    /*
+     ************ TESTING
+     */
+    private void test(){
+        //SEND LINK
+        LinkRequest req = new LinkRequest();
+        req.link = "www.google.gr";
+
+        dataManager.sendLink("192.168.1.126", "8090", req)
+                    .compose(RxUtil.applyDefaultSchedulers())
+                    .doOnNext(baseResponse -> {
+                        if(baseResponse != null)
+                            Timber.i(baseResponse.statusMessage);
+                    })
+                    .doOnError(Throwable::printStackTrace)
+                    .onErrorReturn(throwable -> {return null;})
+                    .subscribe();
+    }
+    /*
+     ************ TESTING
+     */
 
     /*
      * Menu
@@ -115,15 +134,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new DashboardFragment()).commit();
                 break;
-            case R.id.nav_gallery:
-                break;
-            case R.id.nav_slideshow:
-                break;
-            case R.id.nav_manage:
-                break;
-            case R.id.nav_share:
-                break;
-            case R.id.nav_send:
+            default:
                 break;
         }
 

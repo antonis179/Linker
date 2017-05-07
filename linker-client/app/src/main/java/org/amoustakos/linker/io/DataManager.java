@@ -1,10 +1,16 @@
 package org.amoustakos.linker.io;
 
 import org.amoustakos.linker.io.db.RealmController;
+import org.amoustakos.linker.io.models.base.BaseResponse;
+import org.amoustakos.linker.io.models.request.LinkRequest;
 import org.amoustakos.linker.io.remote.ApiService;
+import org.amoustakos.linker.util.network.HttpStatusCode;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import io.reactivex.Observable;
+
 
 @Singleton
 public class DataManager {
@@ -25,16 +31,16 @@ public class DataManager {
     }
 
 
+    public Observable<BaseResponse> sendLink(String ip, String port, LinkRequest req){
+        String url = String.format(ApiService.LINK_ENDPOINT, ip, port);
+        return apiService.sendLink(url, req);
+    }
 
-    // Example
-//    public Observable<Ribot> syncRibots() {
-//        return mRibotsService.getRibots()
-//                .concatMap(new Func1<List<Ribot>, Observable<Ribot>>() {
-//                    @Override
-//                    public Observable<Ribot> call(List<Ribot> ribots) {
-//                        return mDatabaseHelper.setRibots(ribots);
-//                    }
-//                });
-//    }
-
+    public Observable<Boolean> isOnline(String ip, String port){
+        String url = String.format(ApiService.STATUS_ENDPOINT, ip, port);
+        return apiService.getStatus(url)
+                         .map(baseResponse ->
+                            baseResponse != null && HttpStatusCode.isSuccess(baseResponse.statusCode)
+                         );
+    }
 }

@@ -100,6 +100,7 @@ public class RequestHandler extends GzipHandler {
         //Status check
         if(operation.equals("Status")){
             response.setStatus(HttpServletResponse.SC_OK);
+			print(response, makeResponse(HttpServletResponse.SC_OK, null));
         	response.flushBuffer();
         	return;
         }
@@ -130,7 +131,7 @@ public class RequestHandler extends GzipHandler {
                     throw new JSONException("Invalid JSON: " + json);
             }catch(Exception ignored){
                 logger.error("User request error - json operative missing.");
-                print(response, makeErrorJSON(HttpServletResponse.SC_BAD_REQUEST, "Required Field(s) missing"));
+                print(response, makeResponse(HttpServletResponse.SC_BAD_REQUEST, "Required Field(s) missing"));
                 response.flushBuffer();
                 return;
             }
@@ -149,7 +150,7 @@ public class RequestHandler extends GzipHandler {
         }
         catch(Exception | Error e){
         	logger.error("Operation requested error - invalid operation requested");
-            print(response, makeErrorJSON(HttpServletResponse.SC_NOT_FOUND, "Invalid operation requested. Cannot find matching service."));
+            print(response, makeResponse(HttpServletResponse.SC_NOT_FOUND, "Invalid operation requested. Cannot find matching service."));
         	response.flushBuffer();
         	return;
         }
@@ -159,10 +160,10 @@ public class RequestHandler extends GzipHandler {
          */
 		try{
 		    String toSend = map.get(operation).handle(method, json);
-		    response.setStatus(Constants.gson.fromJson(toSend, BaseResponse.class).getStatusCode());
+		    response.setStatus(HttpServletResponse.SC_OK);
 		    print(response, toSend);
         }catch(Exception e){
-        	logger.error("Excecution error", e);
+        	logger.error("Execution error", e);
         	response.flushBuffer();
         	return;
         }
@@ -176,10 +177,10 @@ public class RequestHandler extends GzipHandler {
 	}
 
 	
-	private static String makeErrorJSON(int code, String error) throws JSONException{
+	private static String makeResponse(int code, String message) throws JSONException{
         BaseResponse baseResp = new BaseResponse();
         baseResp.setStatusCode(code);
-        baseResp.setStatusMessage(error);
+        baseResp.setStatusMessage(message);
 		return Constants.gson.toJson(baseResp);
 	}
 }

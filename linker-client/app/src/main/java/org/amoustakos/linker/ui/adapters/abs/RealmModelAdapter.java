@@ -1,4 +1,4 @@
-package org.amoustakos.linker.ui.adapters.adapters.abs;
+package org.amoustakos.linker.ui.adapters.abs;
 
 import android.view.View;
 import android.view.ViewGroup;

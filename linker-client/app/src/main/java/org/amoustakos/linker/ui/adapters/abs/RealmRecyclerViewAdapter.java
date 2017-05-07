@@ -1,4 +1,4 @@
-package org.amoustakos.linker.ui.adapters.adapters.abs;
+package org.amoustakos.linker.ui.adapters.abs;
 
 import android.support.v7.widget.RecyclerView;
 
