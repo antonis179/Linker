@@ -21,7 +21,6 @@
  */
 package org.amoustakos.linker.handler;
 
-import com.mashape.unirest.http.HttpMethod;
 import org.amoustakos.linker.JettyServer;
 import org.amoustakos.linker.endpoints.base.EndpointInterface;
 import org.amoustakos.linker.io.base.BaseResponse;
@@ -30,6 +29,7 @@ import org.amoustakos.linker.resources.Settings;
 import org.amoustakos.linker.utils.ValidatorUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.gzip.GzipHandler;
 import org.json.JSONException;
@@ -177,7 +177,7 @@ public class RequestHandler extends GzipHandler {
 	}
 
 	
-	private static String makeResponse(int code, String message) throws JSONException{
+	private static String makeResponse(int code, String message) throws JSONException {
         BaseResponse baseResp = new BaseResponse();
         baseResp.setStatusCode(code);
         baseResp.setStatusMessage(message);

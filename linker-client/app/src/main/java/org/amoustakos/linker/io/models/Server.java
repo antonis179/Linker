@@ -6,10 +6,12 @@ import io.realm.annotations.PrimaryKey;
 
 public class Server extends RealmObject{
 
-    public static final String C_ID = "server.id",
-                                C_PROTOCOL = "server.protocol",
-                                C_IP = "server.ip",
-                                C_PORT = "server.port";
+    public static final String COL_ID = "server.id",
+                               COL_PROTOCOL = "server.protocol",
+                               COL_IP = "server.ip",
+                               COL_PORT = "server.port",
+                               COL_NAME = "server.name",
+                               COL_DESCRIPTION = "server.description";
 
 
     @PrimaryKey
@@ -18,6 +20,9 @@ public class Server extends RealmObject{
     public String protocol;
     public String ip;
     public int port;
+
+    public String name;
+    public String description;
 
 
 

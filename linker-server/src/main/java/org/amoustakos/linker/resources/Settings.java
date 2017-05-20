@@ -58,6 +58,7 @@ public final class Settings {
 	private int serverPort;
 	private String serverIp; //optional
 	private String logPath;
+	private int serverQueue; //optional
 	
 	/*
 	 * Singleton
@@ -93,6 +94,10 @@ public final class Settings {
 		serverIp = config.getProperty("server.ip");
 		serverPort = Integer.parseInt(config.getProperty("server.port"));
 		logPath = config.getProperty("log.path");
+		if(config.getProperty("server.queue") != null)
+			serverQueue = Integer.parseInt(config.getProperty("server.queue"));
+		else
+			serverQueue = -1;
         logger.info("Connector settings loaded successfully");
 
 
@@ -110,5 +115,8 @@ public final class Settings {
     }
     public String getLogPath() {
         return logPath;
+    }
+    public int getServerQueue() {
+        return serverQueue;
     }
 }

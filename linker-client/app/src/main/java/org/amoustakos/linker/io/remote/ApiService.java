@@ -43,7 +43,7 @@ public interface ApiService {
     @Headers({HEADER_CONTENT_TYPE})
     @GET
     Observable<BaseResponse> getStatus(
-                                        @Url String url
+                                         @Url String url
                                        );
 
 

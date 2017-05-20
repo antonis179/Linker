@@ -8,6 +8,10 @@ import io.realm.RealmModel;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 
+/**
+ * Class to handle all Realm IO. <br>
+ * Specified as {@link Singleton} to only hold one instance of the {@link Realm} object.
+ */
 @Singleton
 public class RealmController {
     private final Realm realm;
@@ -15,6 +19,7 @@ public class RealmController {
     @Inject
     public RealmController() {
         realm = Realm.getDefaultInstance();
+        realm.setAutoRefresh(true);
     }
 
     public Realm getRealm() {
@@ -74,4 +79,10 @@ public class RealmController {
         return success;
     }
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        realm.close();
+        super.finalize();
+    }
 }

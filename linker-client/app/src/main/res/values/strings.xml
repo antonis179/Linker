@@ -1,6 +1,7 @@
 <resources>
     <!-- Titles -->
     <string name="app_name">Linker</string>
+    <string name="share_link_title">Share link</string>
     <string name="title_activity_settings">Settings</string>
 
     <!-- Dialogs -->

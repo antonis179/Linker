@@ -1,17 +1,16 @@
-package org.amoustakos.linker;
 /*
  *	Copyright (c) 2015 Antonis Moustakos
- *	
+ *
  *	Permission is hereby granted, free of charge, to any person obtaining a copy
  *	of this software and associated documentation files (the "Software"), to deal
  *	in the Software without restriction, including without limitation the rights
  *	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *	copies of the Software, and to permit persons to whom the Software is
  *	furnished to do so, subject to the following conditions:
- *	
+ *
  *	The above copyright notice and this permission notice shall be included in
  *	all copies or substantial portions of the Software.
- *	
+ *
  *	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  *	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,14 +19,18 @@ package org.amoustakos.linker;
  *	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *	THE SOFTWARE.
  */
+package org.amoustakos.linker;
+
 import org.amoustakos.linker.exceptions.ServerException;
+import org.amoustakos.linker.handler.RequestHandler;
+import org.amoustakos.linker.resources.Settings;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
-import org.amoustakos.linker.handler.RequestHandler;
-import org.amoustakos.linker.resources.Settings;
+
+import java.util.concurrent.Future;
 
 
 public final class JettyServer {
@@ -61,15 +64,18 @@ public final class JettyServer {
 		/*
 		 * HTTP
 		 */
-        try (ServerConnector connector = new ServerConnector(server)) {
-            connector.setPort(Settings.getInstance().getServerPort());
-            if (Settings.getInstance().getServerIp() != null)
-                connector.setHost(Settings.getInstance().getServerIp());
+        try(ServerConnector baseConn = new ServerConnector(server)) {
+            //Base
+            baseConn.setPort(Settings.getInstance().getServerPort());
+            if(Settings.getInstance().getServerIp() != null)
+                baseConn.setHost(Settings.getInstance().getServerIp());
+            if(Settings.getInstance().getServerQueue() >= 0)
+                baseConn.setAcceptQueueSize(Settings.getInstance().getServerQueue());
 
-            getServer().setConnectors(new Connector[]{connector});
+            getServer().setConnectors(new Connector[]{baseConn});
         }
         catch(Exception e){
-            logger.catching(e);
+            logger.error("Failed to instantiate connector(s)", e);
             System.exit(2);
         }
         getServer().setHandler(new RequestHandler());
@@ -104,13 +110,8 @@ public final class JettyServer {
 		}
 
 		Runtime.getRuntime().addShutdownHook(
-			new Thread() {
-				public void run() {
-                    shutdown();
-				}
-			}
-        );
-
+                                                new Thread(JettyServer::shutdown)
+                                            );
 		logger.info("Server version: " + Version.getFormattedVersion());
 		setAcceptConnections(true);
 	}
@@ -120,8 +121,11 @@ public final class JettyServer {
 		setAcceptConnections(false);
         try {
             logger.info("Terminating connections and stopping server.");
-            //TODO: add hooks to stop accepting connections and wait for all current interactions to finish
-            Thread.sleep(2 * 1000L);
+            for (Connector con : getServer().getConnectors()){
+                Future<Void> future = con.shutdown();
+                while(!future.isDone())
+                    Thread.sleep(250L);
+            }
             getServer().stop();
             logger.info("Server stopped.");
             exitNum = 0;

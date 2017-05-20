@@ -1,6 +1,6 @@
 package org.amoustakos.linker.endpoints.base;
 
-import com.mashape.unirest.http.HttpMethod;
+import org.eclipse.jetty.http.HttpMethod;
 import org.json.JSONException;
 
 public interface EndpointInterface {
@@ -11,7 +11,6 @@ public interface EndpointInterface {
 	String post(String json) throws JSONException;
 	String put(String json) throws JSONException;
 	String delete(String json) throws JSONException;
-	String patch(String json) throws JSONException;
 	String head(String json) throws JSONException;
 	String options(String json) throws JSONException;
 

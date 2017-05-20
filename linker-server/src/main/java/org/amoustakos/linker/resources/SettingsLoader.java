@@ -1,14 +1,11 @@
 package org.amoustakos.linker.resources;
 
-import com.google.common.collect.ImmutableMap;
-import com.mashape.unirest.http.Unirest;
 import org.amoustakos.linker.exceptions.SettingsException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 
 public final class SettingsLoader {
 	/*
@@ -21,14 +18,14 @@ public final class SettingsLoader {
     public static void loadSettings() throws IOException, SettingsException {
 		logger.info("Setting Unirest options...");
 
-		Unirest.setConcurrency(Settings.UNIREST_CONCURRENT_CON_TOTAL, Settings.UNIREST_CONCURRENT_CON_PER_ROUTE);
-		Unirest.clearDefaultHeaders();
-		Map<String, String> headers = ImmutableMap.<String, String>builder()
-											.put("Accept", Settings.HEADER_ACCEPT)
-											.put("Content-Type", Settings.HEADER_CONTENT)
-											.build();
-		for(Map.Entry<String, String> e : headers.entrySet())
-			Unirest.setDefaultHeader(e.getKey(), e.getValue());
+//		Unirest.setConcurrency(Settings.UNIREST_CONCURRENT_CON_TOTAL, Settings.UNIREST_CONCURRENT_CON_PER_ROUTE);
+//		Unirest.clearDefaultHeaders();
+//		Map<String, String> headers = ImmutableMap.<String, String>builder()
+//											.put("Accept", Settings.HEADER_ACCEPT)
+//											.put("Content-Type", Settings.HEADER_CONTENT)
+//											.build();
+//		for(Map.Entry<String, String> e : headers.entrySet())
+//			Unirest.setDefaultHeader(e.getKey(), e.getValue());
 
 		logger.info("Server settings loading...");
 		logger.info("Loading settings file from: " + new File(Settings.SETTINGS_PATH).getCanonicalPath());

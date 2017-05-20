@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import org.amoustakos.linker.R;
 import org.amoustakos.linker.io.DataManager;
+import org.amoustakos.linker.io.models.base.BaseResponse;
 import org.amoustakos.linker.io.models.request.LinkRequest;
 import org.amoustakos.linker.ui.base.BaseActivity;
 import org.amoustakos.linker.util.RxUtil;
@@ -90,11 +91,19 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         dataManager.sendLink("192.168.1.126", "8090", req)
                     .compose(RxUtil.applyDefaultSchedulers())
                     .doOnNext(baseResponse -> {
-                        if(baseResponse != null)
+                        if (baseResponse == null) return;
+                        if(baseResponse.statusCode >= 0)
                             Timber.i(baseResponse.statusMessage);
+                        else
+                            Timber.e(baseResponse.statusMessage);
                     })
                     .doOnError(Throwable::printStackTrace)
-                    .onErrorReturn(throwable -> {return null;})
+                    .onErrorReturn(throwable -> {
+                        BaseResponse br = new BaseResponse();
+                        br.statusMessage = throwable.getMessage();
+                        br.statusCode = -1;
+                        return br;
+                    })
                     .subscribe();
     }
     /*

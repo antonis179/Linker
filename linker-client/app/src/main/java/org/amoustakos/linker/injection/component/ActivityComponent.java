@@ -4,6 +4,7 @@ package org.amoustakos.linker.injection.component;
 import org.amoustakos.linker.ui.MainActivity;
 import org.amoustakos.linker.injection.PerActivity;
 import org.amoustakos.linker.injection.module.ActivityModule;
+import org.amoustakos.linker.ui.ShareLinkActivity;
 
 import dagger.Subcomponent;
 
@@ -14,8 +15,8 @@ import dagger.Subcomponent;
 @Subcomponent(modules = ActivityModule.class)
 public interface ActivityComponent {
 
-//    void inject(BaseActivity activity);
 
     void inject(MainActivity activity);
+    void inject(ShareLinkActivity activity);
 
 }

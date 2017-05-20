@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="org.amoustakos.linker">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:name=".LinkerApplication"
@@ -12,7 +12,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
 
         <!-- MAIN -->
         <activity
@@ -26,7 +25,18 @@
         </activity>
 
         <!-- SHARE -->
-
+        <activity
+            android:name=".ui.ShareLinkActivity"
+            android:label="@string/share_link_title"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+                <!--<data android:mimeType="image/*" />-->
+                <!--<data android:mimeType="video/*" />-->
+            </intent-filter>
+        </activity>
 
     </application>
 

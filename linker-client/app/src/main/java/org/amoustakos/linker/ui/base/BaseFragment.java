@@ -37,21 +37,30 @@ public class BaseFragment extends Fragment{
 
         ConfigPersistentComponent configPersistentComponent;
         if (!sComponentsMap.containsKey(mFragmentId)) {
-            Timber.i("Creating new ConfigPersistentComponent id=%d", mFragmentId);
+            Timber.d("Creating new ConfigPersistentComponent id=%d", mFragmentId);
             configPersistentComponent = DaggerConfigPersistentComponent.builder()
                     .applicationComponent(LinkerApplication.get(getActivity()).getComponent())
                     .build();
             sComponentsMap.put(mFragmentId, configPersistentComponent);
         } else {
-            Timber.i("Reusing ConfigPersistentComponent id=%d", mFragmentId);
+            Timber.d("Reusing ConfigPersistentComponent id=%d", mFragmentId);
             configPersistentComponent = sComponentsMap.get(mFragmentId);
         }
         mFragmentComponent = configPersistentComponent.fragmentComponent(new FragmentModule(this));
     }
 
+    @Override
+    public void onDestroy() {
+        Timber.d("Clearing ConfigPersistentComponent id=%d", mFragmentId);
+        sComponentsMap.remove(mFragmentId);
+        super.onDestroy();
+    }
+
     public FragmentComponent fragmentComponent() {
         return mFragmentComponent;
     }
+
+
 
 //    @Nullable
 //    @Override

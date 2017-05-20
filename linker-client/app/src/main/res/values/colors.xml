@@ -8,7 +8,8 @@
     <color name="white">#ffffff</color>
 
     <!-- Gray -->
-    <color name="gray">#646464</color>
+    <color name="gray_dark">#202020</color>
+    <color name="gray">#505050</color>
     <color name="gray_tr">#c8646464</color>
     <color name="gray_light">#b9b9b9</color>
 

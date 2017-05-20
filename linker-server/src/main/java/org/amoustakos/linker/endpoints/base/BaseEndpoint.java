@@ -1,8 +1,8 @@
 package org.amoustakos.linker.endpoints.base;
 
-import com.mashape.unirest.http.HttpMethod;
 import org.amoustakos.linker.io.base.BaseResponse;
 import org.amoustakos.linker.resources.Constants;
+import org.eclipse.jetty.http.HttpMethod;
 import org.json.JSONException;
 
 
@@ -25,9 +25,6 @@ public class BaseEndpoint implements EndpointInterface{
                 break;
 			case DELETE:
                 execResult = delete(json);
-                break;
-			case PATCH:
-                execResult = patch(json);
                 break;
 			case HEAD:
                 execResult = head(json);
@@ -56,9 +53,6 @@ public class BaseEndpoint implements EndpointInterface{
 		return null;
 	}
 	public String delete(String json) throws JSONException {
-		return null;
-	}
-	public String patch(String json) throws JSONException {
 		return null;
 	}
 	public String head(String json) throws JSONException {

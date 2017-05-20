@@ -12,9 +12,6 @@ import io.realm.RealmConfiguration;
 import timber.log.Timber;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
-/**
- * Created by Antonis Moustakos on 3/11/2017.
- */
 @Singleton
 @ApplicationContext
 public class Environment {
