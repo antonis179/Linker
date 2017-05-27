@@ -59,6 +59,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         NavigationView navigationView = ButterKnife.findById(this, R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        //Default action - replaced as needed by fragments
         fab.setOnClickListener(v -> {
                     test();
                     Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -173,7 +174,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 return;
             }
             setDoubleBackToExitPressedOnce(true);
-            Toast.makeText(this, getString(R.string.back_to_exit), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.toast_back_to_exit), Toast.LENGTH_SHORT).show();
             new Handler().postDelayed(()->setDoubleBackToExitPressedOnce(false), 2000);
         }
     }

@@ -49,7 +49,7 @@ public class Environment {
     }
     private void initFonts(){
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/Ubuntu-condensed.ttf")
+                .setDefaultFontPath("ubuntu/Ubuntu-condensed.ttf")
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );

@@ -2,6 +2,7 @@ package org.amoustakos.linker;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.res.Configuration;
 
 import org.amoustakos.linker.injection.component.ApplicationComponent;
 import org.amoustakos.linker.injection.component.DaggerApplicationComponent;
@@ -41,9 +42,11 @@ public class LinkerApplication extends Application {
         getComponent().environment().init();
     }
 
-
-
-
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        System.gc();
+    }
 
     public static LinkerApplication get(Context context) {
         return (LinkerApplication) context.getApplicationContext();

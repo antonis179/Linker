@@ -43,6 +43,8 @@ public final class JettyServer {
 	private static Server server;
 	private static volatile boolean acceptConnections = false;
 
+    private static final Thread mainThread = Thread.currentThread();
+
 
 	/*
 	 * Constructors
@@ -124,7 +126,7 @@ public final class JettyServer {
             for (Connector con : getServer().getConnectors()){
                 Future<Void> future = con.shutdown();
                 while(!future.isDone())
-                    Thread.sleep(250L);
+                    Thread.sleep(500L);
             }
             getServer().stop();
             logger.info("Server stopped.");
@@ -133,7 +135,14 @@ public final class JettyServer {
             logger.error("Failed to stop server. Killing main thread.", e);
             exitNum = 1;
         }
-        System.exit(exitNum);
+
+        try {
+            System.out.flush();
+            System.err.flush();
+            mainThread.join();
+        } catch (InterruptedException e) {
+            Runtime.getRuntime().halt(exitNum);
+        }
     }
 
 

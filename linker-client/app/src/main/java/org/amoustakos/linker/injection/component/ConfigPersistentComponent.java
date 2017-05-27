@@ -3,6 +3,7 @@ package org.amoustakos.linker.injection.component;
 
 import org.amoustakos.linker.injection.ConfigPersistent;
 import org.amoustakos.linker.injection.module.ActivityModule;
+import org.amoustakos.linker.injection.module.DialogModule;
 import org.amoustakos.linker.injection.module.FragmentModule;
 import org.amoustakos.linker.ui.base.BaseActivity;
 
@@ -21,5 +22,6 @@ public interface ConfigPersistentComponent {
 
     ActivityComponent activityComponent(ActivityModule activityModule);
     FragmentComponent fragmentComponent(FragmentModule fragmentModule);
+    DialogComponent dialogComponent(DialogModule module);
 
 }

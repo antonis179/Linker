@@ -1,5 +1,7 @@
 package org.amoustakos.linker.io.db;
 
+import org.amoustakos.linker.io.models.Server;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -13,17 +15,13 @@ import io.realm.RealmResults;
  * Specified as {@link Singleton} to only hold one instance of the {@link Realm} object.
  */
 @Singleton
-public class RealmController {
+public class RealmManager {
     private final Realm realm;
 
     @Inject
-    public RealmController() {
+    public RealmManager() {
         realm = Realm.getDefaultInstance();
         realm.setAutoRefresh(true);
-    }
-
-    public Realm getRealm() {
-        return realm;
     }
 
     public void setAutoRefresh(boolean autoRefresh) {
@@ -36,7 +34,6 @@ public class RealmController {
     public RealmResults getByModel(Class model) {
         return realm.where(model).findAll();
     }
-
     public RealmModel getByID(Class model, String column, String id) {
         return realm.where(model).equalTo(column, id).findFirst();
     }
@@ -59,24 +56,58 @@ public class RealmController {
     /*
      * MANAGE
      */
+
+    /**
+     * Add a {@link RealmObject} to the database.<br>
+     * If copy parameter is specified as true the copied {@link RealmObject}<br>
+     * will be returned.
+     * @return
+     */
     public RealmObject add(RealmObject object, boolean copy){
-        getRealm().beginTransaction();
+        realm.beginTransaction();
         RealmObject returned = null;
         if(copy)
-            returned = getRealm().copyToRealm(object);
+            returned = realm.copyToRealm(object);
         else
-            getRealm().insert(object);
-        getRealm().commitTransaction();
+            realm.insert(object);
+        realm.commitTransaction();
         return returned;
     }
+
+    public void addOrUpdate(RealmObject object){
+        realm.beginTransaction();
+        realm.insertOrUpdate(object);
+        realm.commitTransaction();
+    }
+
     public void remove(RealmObject object){
         object.deleteFromRealm();
     }
+
     public boolean clearAll(Class model) {
         realm.beginTransaction();
         boolean success = realm.where(model).findAll().deleteAllFromRealm();
         realm.commitTransaction();
         return success;
+    }
+
+
+    /*
+     * Server specific
+     */
+    public boolean serverExists(Server srv){
+        Server savedSrv = realm.where(Server.class)
+                                 .equalTo(Server.COL_IP, srv.ip)
+                                 .equalTo(Server.COL_PORT, srv.port)
+//                                 .equalTo(Server.COL_PROTOCOL, srv.protocol)
+//                                 .equalTo(Server.COL_NAME, srv.name)
+                                 .findFirst();
+        return savedSrv != null;
+    }
+
+    @SuppressWarnings("unchecked")
+    public RealmResults<Server> getServers(){
+        return (RealmResults<Server>) getByModel(Server.class);
     }
 
 

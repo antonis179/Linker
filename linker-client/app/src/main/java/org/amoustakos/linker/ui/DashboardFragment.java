@@ -1,9 +1,10 @@
 package org.amoustakos.linker.ui;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -11,12 +12,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.amoustakos.linker.R;
-import org.amoustakos.linker.io.db.RealmController;
+import org.amoustakos.linker.io.db.RealmManager;
+import org.amoustakos.linker.io.models.Server;
+import org.amoustakos.linker.ui.adapters.ServerAdapter;
+import org.amoustakos.linker.ui.adapters.abs.RealmModelAdapter;
 import org.amoustakos.linker.ui.base.BaseFragment;
+import org.amoustakos.linker.ui.dialogs.AddServerDialog;
 
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
+import io.realm.RealmResults;
 
 /**
  * Created by Antonis Moustakos on 3/16/2017.
@@ -24,9 +30,15 @@ import butterknife.ButterKnife;
 public class DashboardFragment extends BaseFragment implements Toolbar.OnMenuItemClickListener{
 
     @Inject
-    RealmController realmController;
+    RealmManager realmManager;
 
     FloatingActionButton fab;
+
+    private AddServerDialog addSrvDlg = null;
+
+    //Servers
+    private RecyclerView serverRV;
+    private ServerAdapter serverAdapter;
 
 
     @Nullable
@@ -34,13 +46,26 @@ public class DashboardFragment extends BaseFragment implements Toolbar.OnMenuIte
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         setRetainInstance(true);
         fragmentComponent().inject(this);
-        View v = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         //Bind views
         fab = ButterKnife.findById(getActivity(), R.id.fab);
+        serverRV = ButterKnife.findById(view, R.id.rv_server);
 
+        //Dialogs
+        addSrvDlg = new AddServerDialog(getActivity());
 
-        return v;
+        //Listeners
+        fab.setOnClickListener(v -> showAddSrvDlg());
+
+        //Servers
+        serverAdapter = new ServerAdapter(getActivity(), realmManager);
+        setupRecycler();
+        realmManager.setAutoRefresh(true);
+        setRealmAdapter(realmManager.getServers());
+
+        getActivity().getApplication().registerActivityLifecycleCallbacks(addSrvDlg);
+        return view;
     }
 
     @Override
@@ -48,18 +73,20 @@ public class DashboardFragment extends BaseFragment implements Toolbar.OnMenuIte
         super.onViewCreated(view, savedInstanceState);
 
         //Add listeners
-        fab.setOnClickListener(v -> addServerDlg());
+        fab.setOnClickListener(v -> showAddSrvDlg());
 
     }
 
-//    @Override
-//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-//        super.onActivityCreated(savedInstanceState);
-//    }
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if(addSrvDlg != null)
+            getActivity().getApplication().unregisterActivityLifecycleCallbacks(addSrvDlg);
     }
 
     @Override
@@ -67,40 +94,33 @@ public class DashboardFragment extends BaseFragment implements Toolbar.OnMenuIte
         super.onSaveInstanceState(outState);
     }
 
-//    @Override
-//    public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode) {
-//        super.onPictureInPictureModeChanged(isInPictureInPictureMode);
-//    }
-//
-//    @Override
-//    public void onConfigurationChanged(Configuration newConfig) {
-//        super.onConfigurationChanged(newConfig);
-//    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-    }
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
 
     /*
      * Helper methods
      */
     //Start server add dialog
-    private void addServerDlg(){
-        //TODO
+    private synchronized void showAddSrvDlg(){
+        addSrvDlg.setCancelable(true);
+        addSrvDlg.setOnDismissListener(d -> {
+            //TODO: reload servers
+//            setRealmAdapter(realmManager.getServers());
+        });
+        if(!addSrvDlg.isShowing())
+            addSrvDlg.show();
     }
-    //Add server
-    private void addServer(){
-        //TODO
+
+    public void setRealmAdapter(RealmResults<Server> servers) {
+        RealmModelAdapter<Server> realmAdapter = new RealmModelAdapter<>(servers);
+        serverAdapter.setRealmAdapter(realmAdapter);
+        serverAdapter.notifyDataSetChanged();
+    }
+
+    private void setupRecycler() {
+//        serverRV.setHasFixedSize(true);
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        serverRV.setLayoutManager(layoutManager);
+        serverRV.setAdapter(serverAdapter);
     }
 
 

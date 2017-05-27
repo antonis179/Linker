@@ -4,35 +4,22 @@ import org.amoustakos.linker.endpoints.base.BaseEndpoint;
 import org.amoustakos.linker.io.base.BaseResponse;
 import org.amoustakos.linker.io.request.LinkRequest;
 import org.amoustakos.linker.resources.Constants;
+import org.amoustakos.linker.utils.DesktopUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONException;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
 
-/**
- * Created by antonis on 4/15/2017.
- */
 public class Link extends BaseEndpoint{
+    //Log4j
+    private static final Logger logger = LogManager.getLogger(Link.class.getName());
 
     @Override
     public String get(String json) throws JSONException {
-        LinkRequest req = Constants.gson.fromJson(json, LinkRequest.class);
-        if(req == null)
-            return error(HttpServletResponse.SC_BAD_REQUEST, "Empty request.");
-        if(req.getLink() == null)
-            return error(HttpServletResponse.SC_BAD_REQUEST, "No link provided.");
-
-        try {
-            java.awt.Desktop.getDesktop().browse(URI.create(req.getLink()));
-        } catch (IOException ignored) {
-            return error(HttpServletResponse.SC_BAD_REQUEST, "Bad format.");
-        }
-
-        BaseResponse baseResp = new BaseResponse();
-        baseResp.setStatusCode(HttpServletResponse.SC_OK);
-        baseResp.setStatusMessage("OK");
-        return Constants.gson.toJson(baseResp);
+        return post(json);
     }
 
     @Override
@@ -44,9 +31,10 @@ public class Link extends BaseEndpoint{
             return error(HttpServletResponse.SC_BAD_REQUEST, "No link provided.");
 
         try {
-            java.awt.Desktop.getDesktop().browse(URI.create(req.getLink()));
-        } catch (IOException ignored) {
-            return error(HttpServletResponse.SC_BAD_REQUEST, "Bad format.");
+            DesktopUtil.browse(URI.create(req.getLink()));
+        } catch (IOException e) {
+            logger.catching(e);
+            return error(HttpServletResponse.SC_BAD_REQUEST, "Something went wrong! Please check your JRE AWT support.");
         }
 
         BaseResponse baseResp = new BaseResponse();
@@ -59,4 +47,6 @@ public class Link extends BaseEndpoint{
     public String unhandled() throws JSONException {
         return error(HttpServletResponse.SC_BAD_REQUEST, "Wrong operation requested.");
     }
+
+
 }

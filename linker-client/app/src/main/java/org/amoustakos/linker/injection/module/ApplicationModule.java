@@ -7,7 +7,7 @@ import org.amoustakos.linker.Environment;
 import org.amoustakos.linker.injection.ApplicationContext;
 import org.amoustakos.linker.io.DataManager;
 import org.amoustakos.linker.io.PreferencesHelper;
-import org.amoustakos.linker.io.db.RealmController;
+import org.amoustakos.linker.io.db.RealmManager;
 import org.amoustakos.linker.io.remote.ApiService;
 
 import javax.inject.Singleton;
@@ -51,8 +51,8 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    RealmController provideDatabaseHelper() {
-        return new RealmController();
+    RealmManager provideDatabaseHelper() {
+        return new RealmManager();
     }
 
     @Provides
@@ -66,7 +66,7 @@ public class ApplicationModule {
     DataManager provideDataManager(
                                         ApiService apiService,
                                         PreferencesHelper preferencesHelper,
-                                        RealmController databaseHelper
+                                        RealmManager databaseHelper
                                     ) {
         return new DataManager(apiService, preferencesHelper, databaseHelper);
     }

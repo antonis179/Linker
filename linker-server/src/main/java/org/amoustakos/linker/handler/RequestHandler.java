@@ -128,7 +128,7 @@ public class RequestHandler extends GzipHandler {
                     jb.append(line);
                 json = jb.toString();
                 if(!ValidatorUtil.isValidRequest(json))
-                    throw new JSONException("Invalid JSON: " + json);
+                    throw new JSONException("Invalid JSON provided: " + json);
             }catch(Exception ignored){
                 logger.error("User request error - json operative missing.");
                 print(response, makeResponse(HttpServletResponse.SC_BAD_REQUEST, "Required Field(s) missing"));

@@ -27,6 +27,7 @@
 
 
         <TextView
+            android:id="@+id/tv_server_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textAlignment="viewStart"
@@ -40,10 +41,10 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@+id/toolbar"
             app:layout_constraintBottom_toTopOf="@+id/vg_1"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:id="@+id/textView2"/>
+            app:layout_constraintLeft_toLeftOf="parent"/>
 
         <TextView
+            android:id="@+id/tv_server_descr"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textAlignment="viewStart"

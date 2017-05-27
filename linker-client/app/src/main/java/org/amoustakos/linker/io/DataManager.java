@@ -1,20 +1,16 @@
 package org.amoustakos.linker.io;
 
-import org.amoustakos.linker.io.db.RealmController;
+import org.amoustakos.linker.io.db.RealmManager;
 import org.amoustakos.linker.io.models.Server;
 import org.amoustakos.linker.io.models.base.BaseResponse;
 import org.amoustakos.linker.io.models.request.LinkRequest;
 import org.amoustakos.linker.io.remote.ApiService;
 import org.amoustakos.linker.util.network.HttpStatusCode;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
-import io.realm.RealmResults;
 
 
 @Singleton
@@ -22,29 +18,17 @@ public class DataManager {
 
     private final ApiService apiService;
     private final PreferencesHelper mPreferencesHelper;
-    private final RealmController mDatabaseHelper;
+    private final RealmManager mDatabaseHelper;
 
     @Inject
     public DataManager(
                             ApiService apiService,
                             PreferencesHelper preferencesHelper,
-                            RealmController databaseHelper
+                            RealmManager databaseHelper
                        ) {
         this.apiService = apiService;
         this.mPreferencesHelper = preferencesHelper;
         this.mDatabaseHelper = databaseHelper;
-    }
-
-
-    /*
-     * LOCAL
-     */
-    public List<Server> getAllServersBlocking(){
-        List<Server> servers = new ArrayList<>();
-        RealmResults results = mDatabaseHelper.getByModel(Server.class);
-        for(Object server : results)
-            servers.add((Server) server);
-        return servers;
     }
 
 
@@ -56,11 +40,24 @@ public class DataManager {
         return apiService.sendLink(url, req);
     }
 
+    public Observable<BaseResponse> sendLink(Server server, LinkRequest req){
+        String url = String.format(ApiService.LINK_ENDPOINT, server.ip, server.port);
+        return apiService.sendLink(url, req);
+    }
+
     public Observable<Boolean> isOnline(String ip, String port){
         String url = String.format(ApiService.STATUS_ENDPOINT, ip, port);
         return apiService.getStatus(url)
                          .map(baseResponse ->
                             baseResponse != null && HttpStatusCode.isSuccess(baseResponse.statusCode)
                          );
+    }
+
+    public Observable<Boolean> isOnline(Server server){
+        String url = String.format(ApiService.STATUS_ENDPOINT, server.ip, server.port);
+        return apiService.getStatus(url)
+                .map(baseResponse ->
+                        baseResponse != null && HttpStatusCode.isSuccess(baseResponse.statusCode)
+                );
     }
 }

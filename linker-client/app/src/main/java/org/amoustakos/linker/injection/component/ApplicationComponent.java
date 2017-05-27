@@ -9,7 +9,7 @@ import org.amoustakos.linker.injection.ApplicationContext;
 import org.amoustakos.linker.injection.module.ApplicationModule;
 import org.amoustakos.linker.io.DataManager;
 import org.amoustakos.linker.io.PreferencesHelper;
-import org.amoustakos.linker.io.db.RealmController;
+import org.amoustakos.linker.io.db.RealmManager;
 import org.amoustakos.linker.io.remote.ApiService;
 
 import javax.inject.Singleton;
@@ -28,7 +28,7 @@ public interface ApplicationComponent {
     Application application();
     ApiService apiService();
     PreferencesHelper preferencesHelper();
-    RealmController databaseHelper();
+    RealmManager databaseHelper();
     DataManager dataManager();
     Environment environment();
 

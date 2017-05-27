@@ -54,23 +54,23 @@ dependencies {
 
 
 
-//task makeJar(type: Jar) {
-//    classifier = 'all'
-//    manifest {
-//        attributes  'Implementation-Title': 'LINKER-SERVER',
-//                    'Implementation-Version': version,
-//                    'Main-Class': 'server.StartServer'
-//    }
-//    from {
-//        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-//    }{
-//        exclude "META-INF/*.SF"
-//        exclude "META-INF/*.DSA"
-//        exclude "META-INF/*.RSA"
-//    }
-//    with jar
-//}
-//
-//artifacts {
-//    archives makeJar
-//}
+task makeJar(type: Jar) {
+    classifier = 'all'
+    manifest {
+        attributes  'Implementation-Title': 'LINKER-SERVER',
+                    'Implementation-Version': version,
+                    'Main-Class': 'org.amoustakos.linker.StartServer'
+    }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }{
+        exclude "META-INF/*.SF"
+        exclude "META-INF/*.DSA"
+        exclude "META-INF/*.RSA"
+    }
+    with jar
+}
+
+artifacts {
+    archives makeJar
+}

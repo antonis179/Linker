@@ -1,6 +1,6 @@
 package org.amoustakos.linker.injection.module;
 
-import android.app.Fragment;
+import android.app.Dialog;
 import android.content.Context;
 
 import org.amoustakos.linker.injection.ActivityContext;
@@ -8,20 +8,18 @@ import org.amoustakos.linker.injection.ActivityContext;
 import dagger.Module;
 import dagger.Provides;
 
-
 @Module
-public class FragmentModule {
-    private Fragment mFragment;
+public class DialogModule {
+    private Dialog mDialog;
 
-    public FragmentModule(Fragment fragment) {
-        mFragment = fragment;
+    public DialogModule(Dialog dialog) {
+        mDialog = dialog;
     }
 
 
     @Provides
     @ActivityContext
     Context providesContext() {
-        return mFragment.getActivity();
+        return mDialog.getContext();
     }
-
 }

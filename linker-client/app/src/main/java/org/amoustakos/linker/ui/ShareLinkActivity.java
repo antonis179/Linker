@@ -5,6 +5,9 @@ import android.os.Bundle;
 
 import org.amoustakos.linker.R;
 import org.amoustakos.linker.io.DataManager;
+import org.amoustakos.linker.io.db.RealmManager;
+import org.amoustakos.linker.io.models.Server;
+import org.amoustakos.linker.io.models.base.BaseResponse;
 import org.amoustakos.linker.io.models.request.LinkRequest;
 import org.amoustakos.linker.ui.base.BaseActivity;
 import org.amoustakos.linker.util.RxUtil;
@@ -19,6 +22,8 @@ public class ShareLinkActivity extends BaseActivity {
 
     @Inject
     DataManager dataManager;
+    @Inject
+    RealmManager realmManager;
 
     private String url = null;
 
@@ -36,7 +41,7 @@ public class ShareLinkActivity extends BaseActivity {
         //Check Url
         if(url == null)
             return;
-        if(!ValidationUtil.validateURL(url)){
+        if(!ValidationUtil.isValidURL(url)){
             //Show error
             finish();
             return;
@@ -51,28 +56,47 @@ public class ShareLinkActivity extends BaseActivity {
      ************ TESTING
      */
     private void test(){
-        //SEND LINK
-        LinkRequest req = new LinkRequest();
-        req.link = url;
-
-        dataManager.sendLink("192.168.1.126", "8090", req)
-                    .compose(RxUtil.applyDefaultSchedulers())
-                    .doOnNext(baseResponse -> {
-                        if(baseResponse != null)
-                            Timber.i(baseResponse.statusMessage);
-                    })
-                    .doOnError(Throwable::printStackTrace)
-                    .onErrorReturn(throwable -> {return null;})
-                    .subscribe();
+        for(Server server : realmManager.getServers())
+            checkAndSend(server);
     }
+
     /*
      ************ TESTING
      */
 
     //TODO: Add server fragment to activity
-    //TODO: Handle server selection(s) and send link
+    //TODO: Handle server selection(s)
     //TODO: Add progress bar
     //TODO: If only 1 server just send
+
+
+    private void checkAndSend(Server server){
+        dataManager.isOnline(server)
+                .compose(RxUtil.applyDefaultSchedulers())
+                .doOnNext(online -> {
+                    if(online != null && online)
+                        sendLink(server);
+                    //TODO: error message
+                })
+                .doOnError(e -> Timber.e(e, e.getMessage()))
+                .onErrorReturn(e -> false)
+                .subscribe();
+    }
+
+    private void sendLink(Server server){
+        dataManager.sendLink(server, new LinkRequest(url))
+                .compose(RxUtil.applyDefaultSchedulers())
+                .doOnNext(baseResponse -> {
+                    if(baseResponse != null)
+                        Timber.i(baseResponse.statusMessage);
+                    //TODO: error message
+                })
+                .doOnError(e -> Timber.e(e, e.getMessage()))
+                .onErrorReturn(e -> new BaseResponse(-1, e.getMessage()))
+                .subscribe();
+    }
+
+
 
     /*
      * Helpers

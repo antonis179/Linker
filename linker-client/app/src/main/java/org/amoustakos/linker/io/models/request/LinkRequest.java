@@ -5,12 +5,18 @@ import com.google.gson.annotations.SerializedName;
 
 import org.amoustakos.linker.io.models.base.BaseRequest;
 
-/**
- * Created by antonis on 4/15/2017.
- */
 public class LinkRequest extends BaseRequest {
 
     @SerializedName("link") @Expose
     public String link;
 
+
+    /*
+     * COnstructors
+     */
+    public LinkRequest(String link) {
+        this.link = link;
+    }
+
+    public LinkRequest() {}
 }

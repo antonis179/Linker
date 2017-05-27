@@ -5,12 +5,17 @@
     <string name="title_activity_settings">Settings</string>
 
     <!-- Dialogs -->
+    <string name="dialog_add_server_title">Add server</string>
     <string name="dialog_action_ok">OK</string>
+    <string name="dialog_action_add">ADD</string>
     <string name="dialog_action_cancel">Cancel</string>
     <string name="dialog_error_title">Sorry</string>
 
     <!-- Toasts -->
-    <string name="back_to_exit">Click back once again to exit</string>
+    <string name="toast_back_to_exit">Click back once again to exit</string>
+    <string name="toast_server_added">Server added.</string>
+    <string name="toast_error_url_compile">Could not compile valid URL. Please check the input provided</string>
+    <string name="toast_server_exists">A server with the provided information already exists</string>
 
     <!-- TEMP TODO-->
     <string name="add">Add Value</string>
@@ -29,5 +34,23 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_dashboard_title">Dashboard</string>
+
+
+    <!-- Spinner inputs -->
+    <string-array name="protocols">
+        <item>HTTP</item>
+        <item>HTTPS</item>
+    </string-array>
+
+
+    <!-- Input hints -->
+    <string name="hint_ip">IP</string>
+    <string name="hint_port">Port</string>
+    <string name="hint_name">Name</string>
+    <string name="hint_description">Description</string>
+
+
+    <!-- Input errors -->
+    <string name="error_et_generic">Please fill in the field correctly</string>
 
 </resources>

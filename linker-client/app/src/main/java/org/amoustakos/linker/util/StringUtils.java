@@ -10,6 +10,11 @@ public final class StringUtils {
     public static final String EMPTY_STRING = " ";
 
 
+
+    public static String compileUrl(String protocol, String ip, String port){
+        return protocol+"://"+ip+":"+port;
+    }
+
     public static boolean isValidEmail(CharSequence target) {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }

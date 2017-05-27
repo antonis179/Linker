@@ -13,4 +13,11 @@ public class BaseResponse {
     @SerializedName("statusMessage") @Expose
     public String statusMessage;
 
+
+    public BaseResponse() {}
+
+    public BaseResponse(int statusCode, String statusMessage) {
+        this.statusCode = statusCode;
+        this.statusMessage = statusMessage;
+    }
 }
