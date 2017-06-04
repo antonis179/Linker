@@ -24,9 +24,6 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import io.realm.RealmResults;
 
-/**
- * Created by Antonis Moustakos on 3/16/2017.
- */
 public class DashboardFragment extends BaseFragment implements Toolbar.OnMenuItemClickListener{
 
     @Inject
@@ -64,6 +61,14 @@ public class DashboardFragment extends BaseFragment implements Toolbar.OnMenuIte
         realmManager.setAutoRefresh(true);
         setRealmAdapter(realmManager.getServers());
 
+        serverAdapter.getLongClicks()
+                    .doOnNext(pos -> {
+                        //TODO: Add confirmation dialog
+                        realmManager.remove(serverAdapter.getItem(pos));
+                        serverAdapter.notifyDataSetChanged();
+                    })
+                    .subscribe();
+
         getActivity().getApplication().registerActivityLifecycleCallbacks(addSrvDlg);
         return view;
     }
@@ -74,7 +79,6 @@ public class DashboardFragment extends BaseFragment implements Toolbar.OnMenuIte
 
         //Add listeners
         fab.setOnClickListener(v -> showAddSrvDlg());
-
     }
 
     @Override
@@ -116,7 +120,6 @@ public class DashboardFragment extends BaseFragment implements Toolbar.OnMenuIte
     }
 
     private void setupRecycler() {
-//        serverRV.setHasFixedSize(true);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         serverRV.setLayoutManager(layoutManager);

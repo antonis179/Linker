@@ -10,7 +10,7 @@ import java.util.List;
 public class DesktopUtil {
 
     public static boolean browse(URI uri) throws IOException {
-        return openSystemSpecific(uri.toString()) || browseDESKTOP(uri);
+        return browseSystemSpecific(uri.toString()) || browseDESKTOP(uri);
     }
 
 
@@ -52,6 +52,37 @@ public class DesktopUtil {
         if (isWindows(os))
             try{
                 if (runCommand("explorer", "%s", what))
+                    return true;
+            }catch (IOException e){exc = e;}
+
+        if(exc != null)
+            throw exc;
+
+        return false;
+    }
+
+    private static boolean browseSystemSpecific(String what) throws IOException {
+        String os = getOs();
+        IOException exc = null;
+
+        if (isLinux(os)) {
+            try {
+                if (runCommand("kde-open", "%s", what))
+                    return true;
+            }catch (IOException e){exc = e;}
+            try{
+                if (runCommand("gnome-open", "%s", what))
+                    return true;
+            }catch (IOException e){exc = e;}
+            try {
+                if (runCommand("xdg-open", "%s", what))
+                    return true;
+            }catch (IOException e){exc = e;}
+        }
+
+        if (isMac(os))
+            try{
+                if (runCommand("open", "%s", what))
                     return true;
             }catch (IOException e){exc = e;}
 

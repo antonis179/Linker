@@ -30,6 +30,9 @@ import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.concurrent.Future;
 
 
@@ -66,9 +69,11 @@ public final class JettyServer {
 		/*
 		 * HTTP
 		 */
+		int port = -1;
         try(ServerConnector baseConn = new ServerConnector(server)) {
             //Base
-            baseConn.setPort(Settings.getInstance().getServerPort());
+            port = Settings.getInstance().getServerPort();
+            baseConn.setPort(port);
             if(Settings.getInstance().getServerIp() != null)
                 baseConn.setHost(Settings.getInstance().getServerIp());
             if(Settings.getInstance().getServerQueue() >= 0)
@@ -81,7 +86,6 @@ public final class JettyServer {
             System.exit(2);
         }
         getServer().setHandler(new RequestHandler());
-
 
 		logger.info("Starting server...");
 
@@ -116,7 +120,22 @@ public final class JettyServer {
                                             );
 		logger.info("Server version: " + Version.getFormattedVersion());
 		setAcceptConnections(true);
-	}
+
+
+        if(Settings.getInstance().getServerIp() == null) {
+            try {
+                //TODO: add popup window
+                String hostName = InetAddress.getLocalHost().getHostName();
+                InetAddress[] addresses = InetAddress.getAllByName(hostName);
+                for(InetAddress addr : addresses)
+                    if(addr instanceof Inet4Address)
+                        logger.info("Bound to address: " + addr.getHostAddress() + ":" + String.valueOf(port));
+            } catch (UnknownHostException ignored) {}
+        }
+        else{
+            logger.info("Bound to address: " + Settings.getInstance().getServerIp() + ":" + String.valueOf(port));
+        }
+    }
 
 	private static synchronized void shutdown(){
         int exitNum;
@@ -140,7 +159,7 @@ public final class JettyServer {
             System.out.flush();
             System.err.flush();
             mainThread.join();
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             Runtime.getRuntime().halt(exitNum);
         }
     }

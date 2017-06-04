@@ -29,7 +29,7 @@
         <activity
             android:name=".ui.ShareLinkActivity"
             android:label="@string/share_link_title"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />

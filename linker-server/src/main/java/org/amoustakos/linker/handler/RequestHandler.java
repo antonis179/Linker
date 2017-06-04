@@ -118,7 +118,6 @@ public class RequestHandler extends GzipHandler {
         if(ValidatorUtil.isValidRequest(jsonString)) { //Valid GET
             json = jsonString;
         }
-        //TODO: check if this works for all request methods
         else{
             StringBuilder jb;
             try(BufferedReader reader = request.getReader()) {

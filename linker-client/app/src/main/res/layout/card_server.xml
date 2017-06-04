@@ -9,13 +9,13 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="@dimen/card_height">
 
-        <include layout="@layout/toolbar_card"
-                 android:id="@+id/toolbar"
-                 app:layout_constraintTop_toTopOf="parent"
-                 app:layout_constraintLeft_toLeftOf="parent"
-                 app:layout_constraintRight_toRightOf="parent"/>
+        <!--<include layout="@layout/toolbar_card"-->
+                 <!--android:id="@+id/toolbar"-->
+                 <!--app:layout_constraintTop_toTopOf="parent"-->
+                 <!--app:layout_constraintLeft_toLeftOf="parent"-->
+                 <!--app:layout_constraintRight_toRightOf="parent"/>-->
 
 
         <android.support.constraint.Guideline
@@ -31,15 +31,15 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textAlignment="viewStart"
-            style="@style/Text.Regular"
+            style="@style/Text.Bold.Large"
             android:ellipsize="end"
-            android:text="Name"
+            tools:text="Name"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginBottom="8dp"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/toolbar"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/vg_1"
             app:layout_constraintLeft_toLeftOf="parent"/>
 
@@ -50,7 +50,7 @@
             android:textAlignment="viewStart"
             style="@style/Text.Regular.Server.Description"
             android:ellipsize="end"
-            android:text="Description. This can be very large. Thankfully there is a lot of space!!!"
+            tools:text="Description. This can be very large. Thankfully there is a lot of space!!!"
             android:layout_marginRight="8dp"
             android:layout_marginLeft="8dp"
             app:layout_constraintRight_toRightOf="parent"

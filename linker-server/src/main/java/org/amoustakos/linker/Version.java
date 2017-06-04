@@ -3,8 +3,8 @@ package org.amoustakos.linker;
 public class Version {
 
 	//Change version in build.gradle also
-	private static final double VERSION_CODE = 1500;
-	private static final String VERSION = "0.1.5";
+	private static final double VERSION_CODE = 2000;
+	private static final String VERSION = "0.2.0";
 	private static final String RELEASE = "ALPHA";
 	
 	

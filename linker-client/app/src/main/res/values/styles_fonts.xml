@@ -73,7 +73,7 @@
     <!-- Dashboard Server card -->
     <style name="Text.Regular.Server.Description" parent="style/Text.Regular">
         <item name="android:textColor">@color/gray</item>
-        <item name="android:textSize">@dimen/text_xsmall</item>
+        <item name="android:textSize">@dimen/text_small</item>
     </style>
 
 

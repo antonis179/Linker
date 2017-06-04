@@ -81,14 +81,15 @@ public class RealmManager {
     }
 
     public void remove(RealmObject object){
+        realm.beginTransaction();
         object.deleteFromRealm();
+        realm.commitTransaction();
     }
 
-    public boolean clearAll(Class model) {
+    public void clearAll(Class<? extends RealmObject> model) {
         realm.beginTransaction();
-        boolean success = realm.where(model).findAll().deleteAllFromRealm();
+        realm.delete(model);
         realm.commitTransaction();
-        return success;
     }
 
 

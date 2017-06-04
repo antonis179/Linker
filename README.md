@@ -1,15 +1,39 @@
-# TODO
+#Linker
 
-### Linker-Client
+Linker is an application meant to help users simply share links from their android device to their computer.
+It consists of a Java server (Jetty) and an android application.
 
-- [Add] BaseDialog to handle injection resources more efficiently
-- [Add] spinner style (Add server dialog). From kafka?
-- [Add] Button styles
-- [Add] title font style
-- [Add] port validation checks
-- [Add] server check and swipe refresh to dashboard
-- [Add] image view for server status on cards
-- [Change] `add server dialog` layout to linear
+**More info coming soon.**
 
 
-### Linker-Server
+##Requirements
+
+###Android
+- Version: 5.0+
+
+###PC
+The server is compatible with Windows, Linux and Mac (currently untested with Mac).
+- JRE version 8+
+- Any browser
+
+
+
+## License
+
+<pre>
+Copyright (C) 2017  Antonis Moustakos
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see [http://www.gnu.org/licenses/].
+
+</pre>

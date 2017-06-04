@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,16 +17,12 @@ import android.widget.Toast;
 
 import org.amoustakos.linker.R;
 import org.amoustakos.linker.io.DataManager;
-import org.amoustakos.linker.io.models.base.BaseResponse;
-import org.amoustakos.linker.io.models.request.LinkRequest;
 import org.amoustakos.linker.ui.base.BaseActivity;
-import org.amoustakos.linker.util.RxUtil;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -59,20 +54,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         NavigationView navigationView = ButterKnife.findById(this, R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //Default action - replaced as needed by fragments
-        fab.setOnClickListener(v -> {
-                    test();
-                    Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                }
-        );
-
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null)
             onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_dashboard));
-            //TESTING
-//            requestAllPermissions();
-//            registerLocationRetriever();
-        }
     }
 
 
@@ -80,36 +63,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     protected void onDestroy() {
         super.onDestroy();
     }
-
-    /*
-     ************ TESTING
-     */
-    private void test(){
-        //SEND LINK
-        LinkRequest req = new LinkRequest();
-        req.link = "www.google.gr";
-
-        dataManager.sendLink("192.168.1.126", "8090", req)
-                    .compose(RxUtil.applyDefaultSchedulers())
-                    .doOnNext(baseResponse -> {
-                        if (baseResponse == null) return;
-                        if(baseResponse.statusCode >= 0)
-                            Timber.i(baseResponse.statusMessage);
-                        else
-                            Timber.e(baseResponse.statusMessage);
-                    })
-                    .doOnError(Throwable::printStackTrace)
-                    .onErrorReturn(throwable -> {
-                        BaseResponse br = new BaseResponse();
-                        br.statusMessage = throwable.getMessage();
-                        br.statusCode = -1;
-                        return br;
-                    })
-                    .subscribe();
-    }
-    /*
-     ************ TESTING
-     */
 
     /*
      * Menu

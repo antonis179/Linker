@@ -1,6 +1,5 @@
 package org.amoustakos.linker.ui.adapters;
 
-
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +12,10 @@ import org.amoustakos.linker.R;
 import org.amoustakos.linker.io.db.RealmManager;
 import org.amoustakos.linker.io.models.Server;
 import org.amoustakos.linker.ui.adapters.abs.RealmRecyclerViewAdapter;
+import org.amoustakos.linker.util.RxUtil;
 
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
 import io.realm.Realm;
 
 public class ServerAdapter extends RealmRecyclerViewAdapter<Server> {
@@ -24,9 +26,15 @@ public class ServerAdapter extends RealmRecyclerViewAdapter<Server> {
     private Realm realm;
     private LayoutInflater inflater;
 
+    private final PublishSubject<Integer> onClickSubject = PublishSubject.create();
+    private final PublishSubject<Integer> onLongClickSubject = PublishSubject.create();
+
+
     public ServerAdapter(Context context, RealmManager realmManager) {
         this.context = context;
         this.realmManager = realmManager;
+
+        onClickSubject.compose(RxUtil.applyDefaultSchedulers());
     }
 
 
@@ -50,10 +58,16 @@ public class ServerAdapter extends RealmRecyclerViewAdapter<Server> {
     }
 
 
+    public Observable<Integer> getPositionClicks(){
+        return onClickSubject;
+    }
+
+    public Observable<Integer> getLongClicks(){
+        return onLongClickSubject;
+    }
 
 
-
-    public static class ServerViewHolder extends RecyclerView.ViewHolder {
+    public class ServerViewHolder extends RecyclerView.ViewHolder {
 
         CardView container;
         TextView name;
@@ -65,6 +79,12 @@ public class ServerAdapter extends RealmRecyclerViewAdapter<Server> {
             container = (CardView) itemView.findViewById(R.id.card_view_container);
             name = (TextView) itemView.findViewById(R.id.tv_server_name);
             descr = (TextView) itemView.findViewById(R.id.tv_server_descr);
+
+            container.setOnClickListener(v->onClickSubject.onNext(getAdapterPosition()));
+            container.setOnLongClickListener(v -> {
+                onLongClickSubject.onNext(getAdapterPosition());
+                return true;
+            });
             initViews();
         }
 

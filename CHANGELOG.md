@@ -1,0 +1,6 @@
+## Version 0 (Vanilla)
+
+### 0.2.0
+Stuff happened...
+Bugs were killed... New ones found a home in this app.
+Where did I put that bugspray...

@@ -4,6 +4,10 @@
     <string name="share_link_title">Share link</string>
     <string name="title_activity_settings">Settings</string>
 
+
+    <!-- Labels -->
+    <string name="label_select_server">Select server</string>
+
     <!-- Dialogs -->
     <string name="dialog_add_server_title">Add server</string>
     <string name="dialog_action_ok">OK</string>
