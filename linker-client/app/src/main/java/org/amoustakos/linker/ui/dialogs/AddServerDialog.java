@@ -3,7 +3,6 @@ package org.amoustakos.linker.ui.dialogs;
 
 import android.app.Activity;
 import android.app.Application;
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,13 +14,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import org.amoustakos.linker.LinkerApplication;
 import org.amoustakos.linker.R;
-import org.amoustakos.linker.injection.component.ConfigPersistentComponent;
-import org.amoustakos.linker.injection.component.DaggerConfigPersistentComponent;
-import org.amoustakos.linker.injection.module.DialogModule;
 import org.amoustakos.linker.io.db.RealmManager;
 import org.amoustakos.linker.io.models.Server;
+import org.amoustakos.linker.ui.base.BaseDialog;
 import org.amoustakos.linker.util.StringUtils;
 import org.amoustakos.linker.util.ValidationUtil;
 
@@ -29,7 +25,7 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 
-public class AddServerDialog extends Dialog implements Application.ActivityLifecycleCallbacks {
+public class AddServerDialog extends BaseDialog implements Application.ActivityLifecycleCallbacks {
 
     private static boolean lastState = false;
 
@@ -45,19 +41,16 @@ public class AddServerDialog extends Dialog implements Application.ActivityLifec
      */
     public AddServerDialog(@NonNull Context context) {
         super(context);
-        inject(context);
         bindUI();
     }
 
     public AddServerDialog(@NonNull Context context, @StyleRes int themeResId) {
         super(context, themeResId);
-        inject(context);
         bindUI();
     }
 
     protected AddServerDialog(@NonNull Context context, boolean cancelable, @Nullable OnCancelListener cancelListener) {
         super(context, cancelable, cancelListener);
-        inject(context);
         bindUI();
     }
 
@@ -66,6 +59,7 @@ public class AddServerDialog extends Dialog implements Application.ActivityLifec
      * UI
      */
     private void bindUI(){
+        component().inject(this);
         setContentView(R.layout.dialog_add_server);
         setTitle(R.string.dialog_add_server_title);
 
@@ -163,15 +157,6 @@ public class AddServerDialog extends Dialog implements Application.ActivityLifec
 
         return true;
     }
-
-    private void inject(Context context){
-        ConfigPersistentComponent component = DaggerConfigPersistentComponent.builder()
-                .applicationComponent(LinkerApplication.get(context).getComponent())
-                .build();
-        component.dialogComponent(new DialogModule(this)).inject(this);
-    }
-
-
 
 
     /*

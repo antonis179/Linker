@@ -7,7 +7,7 @@ import org.amoustakos.linker.ui.dialogs.AddServerDialog;
 import dagger.Subcomponent;
 
 /**
- * This component inject dependencies to all Dialogs across the application
+ * This component injects dependencies to all Dialogs across the application
  */
 @PerActivity
 @Subcomponent(modules = DialogModule.class)

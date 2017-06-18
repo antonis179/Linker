@@ -16,9 +16,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import timber.log.Timber;
 
-/**
- * Created by Antonis Moustakos on 3/9/2017.
- */
+
 public class BaseFragment extends Fragment{
 
     private static final String KEY_FRAGMENT_ID = "KEY_FRAGMENT_ID";

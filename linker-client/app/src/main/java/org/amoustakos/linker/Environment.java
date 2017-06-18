@@ -3,6 +3,8 @@ package org.amoustakos.linker;
 import android.content.Context;
 
 import org.amoustakos.linker.injection.ApplicationContext;
+import org.amoustakos.linker.io.db.Migration;
+import org.amoustakos.linker.util.preferences.PreferencesUtil;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -28,24 +30,20 @@ public class Environment {
     /*
      * Init methods
      */
-    public void init(){
+    void init(){
+        initPrefs();
         initLog();
         initRealm();
         initFonts();
     }
 
+    private void initPrefs(){
+        PreferencesUtil.init(context);
+    }
+
     private void initLog(){
         if (BuildConfig.DEBUG)
             Timber.plant(new Timber.DebugTree());
-    }
-    private void initRealm(){
-        Realm.init(context);
-        RealmConfiguration realmConfig = new RealmConfiguration
-                .Builder()
-                .schemaVersion(REALM_SCHEMA_VERSION)
-                .deleteRealmIfMigrationNeeded()     //TODO: migration
-                .build();
-        Realm.setDefaultConfiguration(realmConfig);
     }
     private void initFonts(){
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
@@ -54,6 +52,16 @@ public class Environment {
                 .build()
         );
     }
+    private void initRealm(){
+        Realm.init(context);
+        RealmConfiguration realmConfig = new RealmConfiguration
+                .Builder()
+                .schemaVersion(REALM_SCHEMA_VERSION)
+                .migration(new Migration())
+                .build();
+        Realm.setDefaultConfiguration(realmConfig);
+    }
+
 
 
 }
