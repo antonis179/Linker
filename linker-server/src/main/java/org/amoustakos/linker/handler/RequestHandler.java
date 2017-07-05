@@ -21,7 +21,6 @@
  */
 package org.amoustakos.linker.handler;
 
-import org.amoustakos.linker.JettyServer;
 import org.amoustakos.linker.endpoints.base.EndpointInterface;
 import org.amoustakos.linker.io.base.BaseResponse;
 import org.amoustakos.linker.resources.Constants;
@@ -73,7 +72,7 @@ public class RequestHandler extends GzipHandler {
 		/*
 		 * Die if server is shutting down
 		 */
-        if(!JettyServer.isAcceptingConnections()){
+		if(getServer().isStopping() || getServer().isStopped()){
             print(response, "The server is not accepting connections. This probably means a shutdown operation is underway.");
             response.flushBuffer();
             return;

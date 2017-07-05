@@ -6,4 +6,9 @@
 
     <!-- Cards -->
     <dimen name="card_height">100dp</dimen>
+
+    <!-- Button sizes -->
+    <dimen name="btn_flat_large_height">60dp</dimen>
+
+
 </resources>

@@ -32,6 +32,8 @@
     <dimen name="text_xlarge">18sp</dimen>
 
 
+    <!-- Button sizes -->
+    <dimen name="btn_flat_large_height">50dp</dimen>
 
 
 

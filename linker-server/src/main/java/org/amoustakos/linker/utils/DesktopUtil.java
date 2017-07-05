@@ -177,14 +177,25 @@ public class DesktopUtil {
                 unknown = "uknown",
                 windows = "windows";
     }
-    private static boolean isLinux(String os){
+    public static boolean isLinux(String os){
         return OS.linux.equals(os) || OS.solaris.equals(os);
     }
-    private static boolean isMac(String os){
+    public static boolean isMac(String os){
         return OS.macos.equals(os);
     }
-    private static boolean isWindows(String os){
+    public static boolean isWindows(String os){
         return OS.windows.equals(os);
+    }
+
+    public static boolean isLinux(){
+        String os = getOs();
+        return OS.linux.equals(os) || OS.solaris.equals(os);
+    }
+    public static boolean isMac(){
+        return OS.macos.equals(getOs());
+    }
+    public static boolean isWindows(){
+        return OS.windows.equals(getOs());
     }
 
 

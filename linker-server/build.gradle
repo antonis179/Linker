@@ -1,5 +1,5 @@
 group 'org.amoustakos.linker'
-version '0.2.0-ALPHA'
+version '0.5.0-BETA'
 
 task wrapper(type: Wrapper) {
   gradleVersion = '3.3'

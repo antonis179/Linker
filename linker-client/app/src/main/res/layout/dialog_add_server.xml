@@ -141,13 +141,8 @@
 
     <Button
         android:id="@+id/dlg_btn_ok"
+        style="@style/Button.Large.Flat.Accent"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
         android:elevation="24dp"
         android:text="@string/dialog_action_add"
         app:layout_constraintBottom_toBottomOf="parent"

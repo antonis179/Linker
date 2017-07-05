@@ -21,6 +21,7 @@
  */
 package org.amoustakos.linker.resources;
 
+import org.amoustakos.linker.exceptions.SettingsException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -41,13 +42,10 @@ public final class Settings {
 	private static final Logger logger = LogManager.getLogger(Settings.class.getName());
 
 	/*
-	 * Unirest
+	 * REST
 	 */
-	public static final String HEADER_ACCEPT = "application/json;charset=utf-8";
 	public static final String HEADER_CONTENT = "application/json;charset=utf-8";
-	public static final int UNIREST_CONCURRENT_CON_TOTAL = 20000;
-	public static final int UNIREST_CONCURRENT_CON_PER_ROUTE = 5000;
-	
+
 	
 	public static String SETTINGS_PATH;
 
@@ -58,6 +56,7 @@ public final class Settings {
 	private int serverPort;
 	private String serverIp; //optional
 	private String logPath;
+	private String serverMode;
 	private int serverQueue; //optional
 	
 	/*
@@ -65,28 +64,29 @@ public final class Settings {
 	 */
 	private static Settings instance;
 	public static Settings getInstance(){return instance;}
-	public static void init() throws IOException {
+	public static void init() throws IOException, SettingsException {
         if(instance == null)
             instance = new Settings();
     }
 
-	private Settings() throws IOException{
+	private Settings() throws IOException, SettingsException {
 		updateSettings();
 	}
 	
-	private void updateSettings() throws IOException, NullPointerException{
+	private void updateSettings() throws IOException, NullPointerException, SettingsException {
 		Properties config = new Properties();
 		config.load(new FileInputStream(new File(SETTINGS_PATH)));
 		
 		/*
 		 * NULL checks for settings that can cause fatal errors
+		 * TODO: Add to server exceptions
 		 */		
-		
-        //Server
         if(config.getProperty("server.port") == null)
             throw new NullPointerException();
         if(config.getProperty("log.path") == null)
             throw new NullPointerException();
+		if(config.getProperty("server.mode") == null)
+			throw new NullPointerException();
 
 		/*
 		 * SERVER
@@ -98,7 +98,9 @@ public final class Settings {
 			serverQueue = Integer.parseInt(config.getProperty("server.queue"));
 		else
 			serverQueue = -1;
-        logger.info("Connector settings loaded successfully");
+		serverMode = config.getProperty("server.mode");
+		if(!ServerMode.isValid(serverMode))
+			throw new SettingsException(SettingsException.INVALID_SERVER_MODE);
 
 
 		logger.info("Server settings loaded successfully");
@@ -119,4 +121,17 @@ public final class Settings {
     public int getServerQueue() {
         return serverQueue;
     }
+    public boolean initServerGUI(){
+        return serverMode.equals(ServerMode.UI);
+    }
+
+
+    static class ServerMode{
+    	static final String UI = "UI";
+		static final String CLI = "CLI";
+
+    	static boolean isValid(String mode){
+    		return UI.equals(mode) || CLI.equals(mode);
+		}
+	}
 }

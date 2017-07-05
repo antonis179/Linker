@@ -2,9 +2,12 @@ package org.amoustakos.linker.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.widget.Button;
+import android.widget.Toast;
 
 import org.amoustakos.linker.R;
 import org.amoustakos.linker.io.DataManager;
@@ -15,6 +18,7 @@ import org.amoustakos.linker.io.models.request.LinkRequest;
 import org.amoustakos.linker.ui.adapters.ServerAdapter;
 import org.amoustakos.linker.ui.adapters.abs.RealmModelAdapter;
 import org.amoustakos.linker.ui.base.BaseActivity;
+import org.amoustakos.linker.util.ErrorUtil;
 import org.amoustakos.linker.util.RxUtil;
 import org.amoustakos.linker.util.ValidationUtil;
 
@@ -23,7 +27,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.realm.RealmResults;
 import timber.log.Timber;
 
@@ -36,6 +39,8 @@ public class ShareLinkActivity extends BaseActivity {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
+    @BindView(R.id.btn_done)
+    Button btnDone;
 
     //Server
     @BindView(R.id.rv_server) RecyclerView serverRV;
@@ -84,12 +89,14 @@ public class ShareLinkActivity extends BaseActivity {
         final Observable<Integer> obs = serverAdapter.getPositionClicks();
         obs.doOnNext(pos -> {
                 checkAndSend(serverAdapter.getItem(pos), true);
-                obs.unsubscribeOn(AndroidSchedulers.mainThread()); //FIXME: remove once dlg is done
+//                obs.unsubscribeOn(AndroidSchedulers.mainThread()); //FIXME: remove once dlg is done
             })
             .subscribe();
+
+        //When operation is done close the application.
+        btnDone.setOnClickListener(v -> finish());
     }
 
-    //TODO: Implement multiple server selection
     //TODO: Add progress bar
 
 
@@ -99,9 +106,16 @@ public class ShareLinkActivity extends BaseActivity {
                 .doOnNext(online -> {
                     if(online != null && online)
                         sendLink(server, finish);
-                    //TODO: error message
+                    else
+                        showToast(R.string.error_toast_server_offline);
                 })
-                .doOnError(e -> Timber.e(e, e.getMessage()))
+                .doOnError(e -> {
+                    Timber.e(e, e.getMessage());
+                    if(ErrorUtil.isConnectionError(e))
+                        showToast(R.string.error_toast_server_offline);
+                    else
+                        showToast(R.string.error_toast_unknown);
+                })
                 .onErrorReturn(e -> false)
                 .subscribe();
     }
@@ -112,11 +126,18 @@ public class ShareLinkActivity extends BaseActivity {
                 .doOnNext(baseResponse -> {
                     if(baseResponse != null)
                         Timber.i(baseResponse.statusMessage);
-                    //TODO: error message
+                    else
+                        showToast(R.string.error_toast_server_offline);
                     if(finish)
                         finish();
                 })
-                .doOnError(e -> Timber.e(e, e.getMessage()))
+                .doOnError(e -> {
+                    Timber.e(e, e.getMessage());
+                    if(ErrorUtil.isConnectionError(e))
+                        showToast(R.string.error_toast_server_offline);
+                    else
+                        showToast(R.string.error_toast_unknown);
+                })
                 .onErrorReturn(e -> new BaseResponse(-1, e.getMessage()))
                 .subscribe();
     }
@@ -139,6 +160,14 @@ public class ShareLinkActivity extends BaseActivity {
         serverRV.setAdapter(serverAdapter);
     }
 
+    private void showToast(@StringRes int message){
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
+
+
+    /**
+     * Get relevant data from the intent.
+     */
     private void getData(Intent intent){
         if(intent == null){
             //TODO: show error dialog and finish

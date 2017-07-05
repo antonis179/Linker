@@ -21,4 +21,9 @@ public final class Constants {
 	 */
 	public static volatile Gson gson = new Gson();
 
+	/*
+	 * UI
+	 */
+	public static String ICON_PATH = "icon.png";
+
 }

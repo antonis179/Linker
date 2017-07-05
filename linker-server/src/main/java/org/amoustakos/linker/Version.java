@@ -3,9 +3,9 @@ package org.amoustakos.linker;
 public class Version {
 
 	//Change version in build.gradle also
-	private static final double VERSION_CODE = 2000;
-	private static final String VERSION = "0.2.0";
-	private static final String RELEASE = "ALPHA";
+	private static final double VERSION_CODE = 5000;
+	private static final String VERSION = "0.5.0";
+	private static final String RELEASE = "BETA";
 	
 	
 	public static String getFormattedVersion(){

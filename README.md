@@ -1,7 +1,7 @@
 # Linker
 
 Linker is an application meant to help users simply share links from their android device to their computer.
-It consists of a Java server (Jetty) and an android application.
+It consists of a Java server (based on Jetty) and an android application.
 
 **More info coming soon.**
 
@@ -12,7 +12,7 @@ It consists of a Java server (Jetty) and an android application.
 - Version: 5.0+
 
 ### PC
-The server is compatible with Windows, Linux and Mac (currently untested with Mac).
+The server is compatible with Windows, Linux and Mac.
 - JRE version 8+
 - Any browser
 

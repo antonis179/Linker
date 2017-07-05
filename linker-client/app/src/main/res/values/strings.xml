@@ -6,12 +6,12 @@
 
 
     <!-- Labels -->
-    <string name="label_select_server">Select server</string>
+    <string name="label_select_server">Click servers to share with</string>
 
     <!-- Dialogs -->
     <string name="dialog_add_server_title">Add server</string>
     <string name="dialog_action_ok">OK</string>
-    <string name="dialog_action_add">ADD</string>
+    <string name="dialog_action_add">Add</string>
     <string name="dialog_action_cancel">Cancel</string>
     <string name="dialog_error_title">Sorry</string>
 
@@ -56,5 +56,17 @@
 
     <!-- Input errors -->
     <string name="error_et_generic">Please fill in the field correctly</string>
+
+    <!-- Dialog errors -->
+    <string name="error_dlg_schema_update">Could not update database to the latest version.\n
+                                            Please delete the application data and try again</string>
+
+    <!-- Toast errors-->
+    <string name="error_toast_unknown">Oh no! You broke it!</string>
+    <string name="error_toast_server_offline">Server offline!</string>
+
+
+    <!-- Buttons -->
+    <string name="btn_str_done">Done</string>
 
 </resources>

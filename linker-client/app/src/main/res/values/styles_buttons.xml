@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <!--
+
+        Main styles
+
+    -->
+
+    <style name="Button.Large.Flat" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:elevation">8dp</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_marginBottom">16dp</item>
+
+        <item name="android:layout_height">@dimen/btn_flat_large_height</item>
+
+    </style>
+
+
+
+
+    <!--
+
+        Colors
+
+    -->
+
+    <style name="Button.Large.Flat.Accent" parent="Button.Large.Flat">
+        <item name="android:colorAccent">@color/colorAccent</item>
+    </style>
+
+
+
+</resources>

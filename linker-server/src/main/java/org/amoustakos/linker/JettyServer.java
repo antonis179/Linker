@@ -43,33 +43,39 @@ public final class JettyServer {
     //Log4j
 	private static final Logger logger = LogManager.getLogger(JettyServer.class.getName());
 
-	private static Server server;
-	private static volatile boolean acceptConnections = false;
+	private Server server;
+    private int port = -1;
+	private volatile boolean acceptConnections = false;
 
-    private static final Thread mainThread = Thread.currentThread();
+    private final Thread mainThread = Thread.currentThread();
 
 
 	/*
 	 * Constructors
 	 */
-    private JettyServer() {}
+    public JettyServer() {
+        init();
+    }
 
 
     /*
      * Methods
      */
-    public synchronized static void start() throws ServerException{
-		if(getServer() != null){
-			logger.error(ServerException.ALREADY_INITIALIZED);
-			return;
-		}
 
-		setServer(new Server());
+    /**
+     * Init server configuration
+     */
+    private synchronized void init(){
+        if(getServer() != null){
+            logger.warn(ServerException.ALREADY_INITIALIZED);
+            return;
+        }
+
+        setServer(new Server());
 
 		/*
 		 * HTTP
 		 */
-		int port = -1;
         try(ServerConnector baseConn = new ServerConnector(server)) {
             //Base
             port = Settings.getInstance().getServerPort();
@@ -87,6 +93,12 @@ public final class JettyServer {
         }
         getServer().setHandler(new RequestHandler());
 
+        logger.info("Server version: " + Version.getFormattedVersion());
+    }
+
+
+
+    public synchronized void start() throws ServerException{
 		logger.info("Starting server...");
 
 		int tries = 0;
@@ -115,10 +127,10 @@ public final class JettyServer {
 				throw new ServerException(SETTINGS_LOAD_LIMIT_REACHED, exc);
 		}
 
+        Runtime.getRuntime().removeShutdownHook(mainThread);
 		Runtime.getRuntime().addShutdownHook(
-                                                new Thread(JettyServer::shutdown)
+                                                new Thread(this::shutdown)
                                             );
-		logger.info("Server version: " + Version.getFormattedVersion());
 		setAcceptConnections(true);
 
 
@@ -137,9 +149,8 @@ public final class JettyServer {
         }
     }
 
-	private static synchronized void shutdown(){
-        int exitNum;
-		setAcceptConnections(false);
+    public synchronized boolean stop(){
+        setAcceptConnections(false);
         try {
             logger.info("Terminating connections and stopping server.");
             for (Connector con : getServer().getConnectors()){
@@ -149,12 +160,15 @@ public final class JettyServer {
             }
             getServer().stop();
             logger.info("Server stopped.");
-            exitNum = 0;
+            return true;
         } catch (Exception e) {
-            logger.error("Failed to stop server. Killing main thread.", e);
-            exitNum = 1;
+            logger.error("Failed to stop server.", e);
+            return false;
         }
+    }
 
+	public synchronized void shutdown(){
+        int exitNum = stop() ? 0 : 1;
         try {
             System.out.flush();
             System.err.flush();
@@ -168,10 +182,10 @@ public final class JettyServer {
 	/*
 	 * Getters - Setters
 	 */
-    private synchronized static Server getServer() {return server;}
-    private static void setServer(Server server) {JettyServer.server = server;}
-	public static synchronized boolean isAcceptingConnections() {return acceptConnections;}
-	public static synchronized void setAcceptConnections(boolean acceptConnections) {JettyServer.acceptConnections = acceptConnections;}
+    private synchronized Server getServer() {return server;}
+    private void setServer(Server server) {this.server = server;}
+	public synchronized boolean isAcceptingConnections() {return acceptConnections;}
+	public synchronized void setAcceptConnections(boolean acceptConnections) {this.acceptConnections = acceptConnections;}
 }
 
 
