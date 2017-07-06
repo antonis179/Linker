@@ -59,7 +59,7 @@ task makeJar(type: Jar) {
     manifest {
         attributes  'Implementation-Title': 'LINKER-SERVER',
                     'Implementation-Version': version,
-                    'Main-Class': 'org.amoustakos.linker.StartServer'
+                    'Main-Class': 'org.amoustakos.linker.Main'
     }
     from {
         configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
