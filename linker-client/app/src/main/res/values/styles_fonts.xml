@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!--TODO-->
 
     <style name="TextInputLayoutErrorStyle" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/colorAccent</item>

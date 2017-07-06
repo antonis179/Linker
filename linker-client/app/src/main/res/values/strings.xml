@@ -7,6 +7,7 @@
 
     <!-- Labels -->
     <string name="label_select_server">Click servers to share with</string>
+    <string name="app_descr">Share all the things!</string>
 
     <!-- Dialogs -->
     <string name="dialog_add_server_title">Add server</string>
