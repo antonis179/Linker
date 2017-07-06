@@ -4,6 +4,7 @@
 - Villains were destroyed - Heroes emerged.
 - A UI was added to the server (I know right?!) in the form of a lovely taskbar icon!
 - Toast messages added to client
+- Colors and styles were changed!
 
 
 ### 0.2.0-ALPHA
