@@ -12,7 +12,7 @@ public class LinkRequest extends BaseRequest {
 
 
     /*
-     * COnstructors
+     * Constructors
      */
     public LinkRequest(String link) {
         this.link = link;

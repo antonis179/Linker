@@ -1,8 +1,12 @@
 package org.amoustakos.linker.util;
 
+import android.text.TextUtils;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.regex.Pattern;
+
+import timber.log.Timber;
 
 /**
  * Created by Antonis Moustakos on 5/16/2017.
@@ -10,11 +14,21 @@ import java.util.regex.Pattern;
 
 public final class ValidationUtil {
 
+    public static boolean isValidEmail(CharSequence target) {
+        try {
+            return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+        }catch(Exception e){
+            Timber.d(e);
+            return false;
+        }
+    }
+
     public static boolean isValidURL(String url){
         try {
             new URL(url);
             return true;
         } catch (MalformedURLException e) {
+            Timber.d(e);
             return false;
         }
     }
@@ -25,6 +39,7 @@ public final class ValidationUtil {
                     "^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
             return ipPattern.matcher(ip).matches();
         } catch (Exception e){
+            Timber.d(e);
             return false;
         }
     }
@@ -35,6 +50,7 @@ public final class ValidationUtil {
             int fPort = Integer.parseInt(port);
             return fPort>=1 && fPort<=65535;
         }catch(Exception e){
+            Timber.d(e);
             return false;
         }
     }

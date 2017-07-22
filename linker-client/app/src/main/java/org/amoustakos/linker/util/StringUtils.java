@@ -15,9 +15,6 @@ public final class StringUtils {
         return protocol+"://"+ip+":"+port;
     }
 
-    public static boolean isValidEmail(CharSequence target) {
-        return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
-    }
 
     public static String setFirstCharUpperCase(String text) {
         StringBuilder rackingSystemSb = new StringBuilder(text.toLowerCase(Locale.getDefault()));

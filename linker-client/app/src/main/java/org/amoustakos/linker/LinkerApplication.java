@@ -33,7 +33,7 @@ public class LinkerApplication extends Application {
                 .applicationModule(new ApplicationModule(this))
                 .build();
 
-        getComponent().inject(this);
+//        getComponent().inject(this);
 
         /*
          * Init app environment.
@@ -55,8 +55,4 @@ public class LinkerApplication extends Application {
         return mApplicationComponent;
     }
 
-    // Needed to replace the component with a test specific one
-//    public void setComponent(ApplicationComponent applicationComponent) {
-//        mApplicationComponent = applicationComponent;
-//    }
 }

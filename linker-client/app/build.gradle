@@ -107,8 +107,10 @@ dependencies {
     //Permissions
     compile 'com.karumi:dexter:4.0.0'
 
-    //Timber - Butterknife
-    compile 'com.jakewharton.timber:timber:4.1.2'
+    //Butterknife - checked 20170721
+    compile 'com.jakewharton.timber:timber:4.5.1'
+
+    //Timber
     compile "com.jakewharton:butterknife:${BUTTERKNIFE_VERSION}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${BUTTERKNIFE_VERSION}"
 

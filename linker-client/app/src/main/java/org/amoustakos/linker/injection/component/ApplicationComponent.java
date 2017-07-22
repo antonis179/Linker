@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 
 import org.amoustakos.linker.Environment;
-import org.amoustakos.linker.LinkerApplication;
 import org.amoustakos.linker.injection.ApplicationContext;
 import org.amoustakos.linker.injection.module.ApplicationModule;
 import org.amoustakos.linker.io.DataManager;
@@ -21,7 +20,7 @@ import dagger.Component;
 public interface ApplicationComponent {
 
 //    void inject(SyncService syncService);
-    void inject(LinkerApplication app);
+//    void inject(LinkerApplication app);
 
     @ApplicationContext
     Context context();

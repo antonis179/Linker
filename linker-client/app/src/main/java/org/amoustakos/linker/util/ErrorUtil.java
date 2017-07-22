@@ -20,6 +20,8 @@ public final class ErrorUtil {
     }
 
 
+    //TODO: Auth error
+
 
 
 }
