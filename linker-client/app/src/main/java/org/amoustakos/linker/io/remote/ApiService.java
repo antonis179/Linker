@@ -60,7 +60,9 @@ public interface ApiService {
                 interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             else
                 interceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
-            OkHttpClient httpClient = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+            OkHttpClient httpClient = new OkHttpClient.Builder()
+                    .addInterceptor(interceptor)
+                    .build();
 
             Retrofit retrofit = new Retrofit.Builder()
                     //use a dummy endpoint as a base url as it is required by retrofit

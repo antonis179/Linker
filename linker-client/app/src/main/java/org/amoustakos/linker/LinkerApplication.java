@@ -33,8 +33,6 @@ public class LinkerApplication extends Application {
                 .applicationModule(new ApplicationModule(this))
                 .build();
 
-//        getComponent().inject(this);
-
         /*
          * Init app environment.
          * logs, db, fonts depend on this.

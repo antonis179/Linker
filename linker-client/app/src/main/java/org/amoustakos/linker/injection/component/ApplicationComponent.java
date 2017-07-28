@@ -19,9 +19,6 @@ import dagger.Component;
 @Component(modules = ApplicationModule.class)
 public interface ApplicationComponent {
 
-//    void inject(SyncService syncService);
-//    void inject(LinkerApplication app);
-
     @ApplicationContext
     Context context();
     Application application();

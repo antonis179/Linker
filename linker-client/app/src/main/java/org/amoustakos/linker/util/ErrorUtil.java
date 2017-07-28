@@ -5,8 +5,7 @@ public final class ErrorUtil {
 
 
     /**
-     * Returns true if the throwable is a connection exception <br>
-     * in the java.net package.
+     * Returns true if the {@link Throwable} was thrown because of a connection error.
      */
     public static boolean isConnectionError(Throwable t){
         return t instanceof java.net.ConnectException
