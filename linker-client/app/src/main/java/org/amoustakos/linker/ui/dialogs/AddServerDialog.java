@@ -33,8 +33,8 @@ public class AddServerDialog extends BaseDialog implements Application.ActivityL
     RealmManager realmManager;
 
     //Views
-    EditText ipET, portET, nameET, descrET;
-    Spinner protocolSpin;
+    private EditText ipET, portET, nameET, descrET;
+    private Spinner protocolSpin;
 
     /*
      * Constructors
