@@ -6,6 +6,8 @@ import org.amoustakos.linker.injection.ApplicationContext;
 import org.amoustakos.linker.io.db.Migration;
 import org.amoustakos.linker.util.preferences.PreferencesUtil;
 
+import java.lang.ref.WeakReference;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -15,14 +17,13 @@ import timber.log.Timber;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 @Singleton
-@ApplicationContext
 public class Environment {
     private static final int REALM_SCHEMA_VERSION = 0;
-    private final Context context;
+	private final WeakReference<Context> context;
 
     @Inject
-    public Environment(Context context) {
-        this.context = context;
+    public Environment(@ApplicationContext Context context) {
+	    this.context = new WeakReference<>(context);
     }
 
 
@@ -38,7 +39,7 @@ public class Environment {
     }
 
     private void initPrefs(){
-        PreferencesUtil.init(context);
+	    PreferencesUtil.init(context.get());
     }
 
     private void initLog(){
@@ -53,8 +54,8 @@ public class Environment {
         );
     }
     private void initRealm(){
-        Realm.init(context);
-        RealmConfiguration realmConfig = new RealmConfiguration
+	    Realm.init(context.get());
+	    RealmConfiguration realmConfig = new RealmConfiguration
                 .Builder()
                 .schemaVersion(REALM_SCHEMA_VERSION)
                 .migration(new Migration())

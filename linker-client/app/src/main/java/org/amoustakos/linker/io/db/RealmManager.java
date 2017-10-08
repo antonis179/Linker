@@ -61,7 +61,6 @@ public class RealmManager {
      * Add a {@link RealmObject} to the database.<br>
      * If copy parameter is specified as true the copied {@link RealmObject}<br>
      * will be returned.
-     * @return
      */
     public RealmObject add(RealmObject object, boolean copy){
         realm.beginTransaction();

@@ -1,5 +1,10 @@
 ## Version 0 (Vanilla)
 
+### 0.5.3-BETA
+- Updated to target android O
+- Various bug fixes
+
+
 ### 0.5.0-BETA
 - Villains were destroyed - Heroes emerged.
 - A UI was added to the server (I know right?!) in the form of a lovely taskbar icon!
